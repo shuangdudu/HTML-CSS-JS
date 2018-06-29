@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>show</title>
+    <style type="text/css">
+        html,body{
+            margin:0px;
+            padding:0px;
+        }
+        ul{
+            margin:0px;
+            padding:0px;
+            list-style: none;
+        }
+        .containter{
+            width:1200px;
+            height:200px;
+            margin:auto;
+        }
+        .list li{
+            float:left;
+            margin-top:12px
+        }
+        .list .block{
+            width:279px;
+            padding:7px 7px 10px 7px;
+            boder:1px;
+
+        }
+        .list .block .face{
+            width:100%;
+        }
+        .list li{
+            margin-right: 5px;;
+        }
+        .title{
+            text-decoration: none;
+        }
+        .title h4{
+            font-size: 14px;
+            font-weight: normal;
+            max-width: 196px;
+            margin-top: 10px;
+            margin-bottom:8px;
+            color:#000;
+        }
+        .price{
+            float:left;
+            font-size:14px;
+        }
+        .org{
+            float:right;
+            font-size:12px;
+        }
+        .list .block img{
+            width:100%;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="containter">
+        <ul class="list">
+       <!--     <li>
+                <div class="block">
+                    <a href="#" class="face">
+                        <img src="../images/1.webp">
+                    </a>
+                    <div>
+                        <a href="#" class="title"><h4>手把手教你数据库编程包教包会还免费</h4></a>
+                    </div>
+
+                    <div>
+                        <span class="price">免费</span>
+                        <a class="org">武汉大学</a>
+                    </div>
+                </div>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li>
+
+            </li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+-->
+        </ul>
+
+
+    </div>
+    <script src="../../dependency-javascript/jquery.min.js"></script>
+    <script>
+       $(function(){
+           console.log(11111111111);
+           var $list = $(".containter .list" );
+           var template = '<li>'+
+              ' <div class="block">'+
+                   '<a href="#" class="face">'+
+                       '<img src="${img}">'+
+                   '</a>'+
+                   '<div>'+
+                       '<a href="#" class="title"><h4>${title}</h4></a>'+
+                   '</div>'+
+                  ' <div>'+
+                       '<span class="price">${price}</span>'+
+                      ' <a class="org">${orgName}</a>'+
+                  ' </div>'+
+               '</div>'
+           $.getJSON('./data.json', function(data){
+               for (var i = 0; i < data.length; i++) {
+                   var block = template;
+                   for(var prop in data[i]){
+                        block = block.replace("${"+prop+"}",data[i][prop]);
+                   }
+                   $list.append(block);
+//                 console.log(data[i]);
+               }
+           });
+       });
+    </script>
+</body>
+</html>

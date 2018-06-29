@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>primordialAJAX</title>
+</head>
+<body>
+        <button onclick="update()">更新JSON数据</button><br>
+        <button onclick="updateXML()">更新XML数据</button>
+        <div id="dataArea">这里用来显示服务器返回的数据</div>
+<script>
+    function getXmlHttp(){
+        var xmlHttp;
+        if(window.ActiveXObject){
+            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");// IE 6,7,8
+        }
+        if(window.XMLHttpRequest){
+            xmlHttp = new XMLHttpRequest();
+        }
+        return xmlHttp;
+    }
+    function update(){
+        var xmlHttp = getXmlHttp();
+        xmlHttp.open("get","./data.txt");
+        xmlHttp.send(null);
+        xmlHttp.onreadystatechange = function(event){
+            if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
+                var json = JSON.parse(xmlHttp.responseText);
+                console.log(typeof(json));
+                var dom = document.getElementById("dataArea");
+                var list = "<p>";
+                for(var i = 0;i<json.length;i++){
+                    for(var key in json[i]){
+                        if(key == "name"){
+                            list += "姓名："+json[i][key]+","
+                        }
+                        if(key == "age"){
+                            list += "年龄："+json[i][key]
+                        }
+                    }
+                    list += "</p><br>"
+                    // list = list + '<p>姓名：'+json[i]["name"]+','+"年龄："+json[i]["age"]+'</p><br>';
+                    console.log(list);
+                }
+                dom.innerHTML = list;
+
+            }
+        }
+    }
+
+</script>
+</body>
+</html>
