@@ -5,11 +5,11 @@
     <title>primordialAJAX</title>
 </head>
 <body>
-        <button onclick="update()">更新JSON数据</button><br>
+        <button onclick="updateJSON()">更新JSON数据</button><br>
         <button onclick="updateXML()">更新XML数据</button>
         <div id="dataArea">这里用来显示服务器返回的数据</div>
 <script>
-    function getXmlHttp(){
+    function ajaxSend(url,callback){
         var xmlHttp;
         if(window.ActiveXObject){
             xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");// IE 6,7,8
@@ -17,37 +17,52 @@
         if(window.XMLHttpRequest){
             xmlHttp = new XMLHttpRequest();
         }
-        return xmlHttp;
-    }
-    function update(){
-        var xmlHttp = getXmlHttp();
-        xmlHttp.open("get","./data.txt");
+        xmlHttp.open("get",url);
         xmlHttp.send(null);
         xmlHttp.onreadystatechange = function(event){
             if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                var json = JSON.parse(xmlHttp.responseText);
-                console.log(typeof(json));
-                var dom = document.getElementById("dataArea");
-                var list = "<p>";
-                for(var i = 0;i<json.length;i++){
-                    for(var key in json[i]){
-                        if(key == "name"){
-                            list += "姓名："+json[i][key]+","
-                        }
-                        if(key == "age"){
-                            list += "年龄："+json[i][key]
-                        }
-                    }
-                    list += "</p><br>"
-                    // list = list + '<p>姓名：'+json[i]["name"]+','+"年龄："+json[i]["age"]+'</p><br>';
-                    console.log(list);
-                }
-                dom.innerHTML = list;
-
+                callback(xmlHttp);
             }
         }
     }
+    function updateJSON(){
+        ajaxSend("./data.txt",function(xmlHttp){
+            var json = JSON.parse(xmlHttp.responseText);
+            console.log(typeof(json));
+            var dom = document.getElementById("dataArea");
+            var list = "<p>";
+            for(var i = 0;i<json.length;i++){
+                for(var key in json[i]){
+                    if(key == "name"){
+                        list += "姓名："+json[i][key]+","
+                    }
+                    if(key == "age"){
+                        list += "年龄："+json[i][key]
+                    }
+                }
+                list += "</p><br>"
+                // list = list + '<p>姓名：'+json[i]["name"]+','+"年龄："+json[i]["age"]+'</p><br>';
+                console.log(list);
+            }
+            dom.innerHTML = list;
+        })
+    }
+    function updateXML(){
+        ajaxSend("./data.xml",function(xmlHttp){
+           var resultXML = xmlHttp.responseXML.firstChild.children;
+           var str = "";
+            var dom = document.getElementById("dataArea")
+           for(var i = 0;i<resultXML.length;i++){
 
+              // resultXML.attributes["name"].nodeValue + ":"+ resultXML[i].attributes["age"].nodeValue+"<br>"
+               str += resultXML[i].attributes["name"].nodeValue+","+resultXML[i].attributes["age"].nodeValue+"<br>";
+              console.log(resultXML[i].attributes["name"].nodeValue);
+           }
+           // debugger;
+            dom.innerHTML = str;
+                console.log(resultXML);
+    })
+    }
 </script>
 </body>
 </html>
